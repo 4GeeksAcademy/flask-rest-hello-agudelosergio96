@@ -5,6 +5,16 @@ from sqlalchemy.orm import Mapped, mapped_column
 db = SQLAlchemy()
 
 
+class Follower(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_from_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
+    user_to_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_from_id": self.user_from_id,
+            "user_to_id": self.user_to_id
+        }
 class User(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
 
@@ -71,13 +81,3 @@ class Media(db.Model):
             "post_id": self.post_id
         }
 
-class Follower(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True)
-    user_from_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
-    user_to_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
-    def serialize(self):
-        return {
-            "id": self.id,
-            "user_from_id": self.user_from_id,
-            "user_to_id": self.user_to_id
-        }
